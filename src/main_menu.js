@@ -2,8 +2,10 @@ const canvas = document.getElementById("game");
 canvas.width = 1280;
 canvas.height = 720;
 
+canvas.tabIndex = 1;
+canvas.focus();
+
 const ctx = canvas.getContext("2d");
-ctx.font = "40px Arial";
 ctx.textAlign = "center";
 ctx.textBaseline = "middle";
 
@@ -11,12 +13,18 @@ const options = ["Solo", "Play with Friend"];
 let selected = 0;
 
 window.addEventListener("keydown", (e) => {
+  if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
+    e.preventDefault();
+  }
+
   if (e.key === "ArrowUp") {
     selected = (selected - 1 + options.length) % options.length;
   }
+
   if (e.key === "ArrowDown") {
     selected = (selected + 1) % options.length;
   }
+
   if (e.key === "Enter") {
     alert("Selected: " + options[selected]);
   }
@@ -25,16 +33,13 @@ window.addEventListener("keydown", (e) => {
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // background
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // title
   ctx.fillStyle = "white";
   ctx.font = "60px Arial";
   ctx.fillText("MAIN MENU", canvas.width / 2, 200);
 
-  // options
   ctx.font = "40px Arial";
   options.forEach((opt, i) => {
     ctx.fillStyle = i === selected ? "yellow" : "white";
@@ -46,3 +51,4 @@ function loop() {
 }
 
 loop();
+

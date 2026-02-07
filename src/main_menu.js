@@ -1,7 +1,6 @@
 const canvas = document.getElementById("game");
 canvas.width = 1280;
 canvas.height = 720;
-
 canvas.tabIndex = 1;
 canvas.focus();
 
@@ -12,6 +11,11 @@ ctx.textBaseline = "middle";
 const options = ["Solo", "Play with Friend"];
 let selected = 0;
 
+// vị trí menu (để click)
+const menuY = 350;
+const lineHeight = 60;
+
+// KEYBOARD
 window.addEventListener("keydown", (e) => {
   if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
     e.preventDefault();
@@ -26,29 +30,53 @@ window.addEventListener("keydown", (e) => {
   }
 
   if (e.key === "Enter") {
-    alert("Selected: " + options[selected]);
+    chooseOption();
   }
 });
 
+// MOUSE MOVE (hover)
+canvas.addEventListener("mousemove", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseY = e.clientY - rect.top;
+
+  options.forEach((_, i) => {
+    const y = menuY + i * lineHeight;
+    if (mouseY > y - 30 && mouseY < y + 30) {
+      selected = i;
+    }
+  });
+});
+
+// MOUSE CLICK
+canvas.addEventListener("click", () => {
+  chooseOption();
+});
+
+function chooseOption() {
+  alert("Selected: " + options[selected]);
+}
+
+// RENDER
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // background
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // title
   ctx.fillStyle = "white";
   ctx.font = "60px Arial";
   ctx.fillText("MAIN MENU", canvas.width / 2, 200);
 
+  // menu options
   ctx.font = "40px Arial";
   options.forEach((opt, i) => {
     ctx.fillStyle = i === selected ? "yellow" : "white";
-    const prefix = i === selected ? "> " : "  ";
-    ctx.fillText(prefix + opt, canvas.width / 2, 350 + i * 60);
+    ctx.fillText(opt, canvas.width / 2, menuY + i * lineHeight);
   });
 
   requestAnimationFrame(loop);
 }
 
 loop();
-

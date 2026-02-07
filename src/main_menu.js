@@ -1,3 +1,4 @@
+console.log("MAIN MENU JS RUNNING");
 import { SceneId } from "./scenes.js";
 
 export class MainMenuScene {

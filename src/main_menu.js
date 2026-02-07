@@ -11,9 +11,9 @@ ctx.textBaseline = "middle";
 const options = ["Solo", "Play with Friend"];
 let selected = 0;
 
-// vị trí menu (để click)
 const menuY = 350;
 const lineHeight = 60;
+const hitWidth = 300; // vùng click ngang
 
 // KEYBOARD
 window.addEventListener("keydown", (e) => {
@@ -26,7 +26,7 @@ window.addEventListener("keydown", (e) => {
   }
 
   if (e.key === "ArrowDown") {
-    selected = (selected + 1) % options.length;
+    selected = (selected + options.length) % options.length;
   }
 
   if (e.key === "Enter") {
@@ -37,19 +37,44 @@ window.addEventListener("keydown", (e) => {
 // MOUSE MOVE (hover)
 canvas.addEventListener("mousemove", (e) => {
   const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
 
   options.forEach((_, i) => {
     const y = menuY + i * lineHeight;
-    if (mouseY > y - 30 && mouseY < y + 30) {
+    const xCenter = canvas.width / 2;
+
+    if (
+      mouseX > xCenter - hitWidth &&
+      mouseX < xCenter + hitWidth &&
+      mouseY > y - 30 &&
+      mouseY < y + 30
+    ) {
       selected = i;
     }
   });
 });
 
-// MOUSE CLICK
-canvas.addEventListener("click", () => {
-  chooseOption();
+// MOUSE DOWN (CLICK)
+canvas.addEventListener("mousedown", (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = e.clientX - rect.left;
+  const mouseY = e.clientY - rect.top;
+
+  options.forEach((_, i) => {
+    const y = menuY + i * lineHeight;
+    const xCenter = canvas.width / 2;
+
+    if (
+      mouseX > xCenter - hitWidth &&
+      mouseX < xCenter + hitWidth &&
+      mouseY > y - 30 &&
+      mouseY < y + 30
+    ) {
+      selected = i;
+      chooseOption();
+    }
+  });
 });
 
 function chooseOption() {
@@ -69,7 +94,7 @@ function loop() {
   ctx.font = "60px Arial";
   ctx.fillText("MAIN MENU", canvas.width / 2, 200);
 
-  // menu options
+  // menu
   ctx.font = "40px Arial";
   options.forEach((opt, i) => {
     ctx.fillStyle = i === selected ? "yellow" : "white";

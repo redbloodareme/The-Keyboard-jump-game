@@ -1,0 +1,6 @@
+export const SceneId = {
+  MAIN_MENU: "MAIN_MENU",
+  SOLO_GAME: "SOLO_GAME",
+  FRIEND_GAME: "FRIEND_GAME",
+  SETTINGS: "SETTINGS",
+};

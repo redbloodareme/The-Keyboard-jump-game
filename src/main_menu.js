@@ -1,4 +1,6 @@
-const canvas = document.getElementById("game");
+const bg = new Image();
+bg.src = "./assets/menu_bg.png";
+const canvas = document.getElementById("game"); 
 canvas.width = 1280;
 canvas.height = 720;
 
@@ -96,8 +98,11 @@ function loop() {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "black";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  if (bgImage.complete) {
+  ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+}
+// ctx.fillStyle = "black";
+  // ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // Title
   ctx.fillStyle = "white";

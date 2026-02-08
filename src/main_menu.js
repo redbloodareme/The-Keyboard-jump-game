@@ -1,8 +1,6 @@
 const canvas = document.getElementById("game");
 canvas.width = 1280;
 canvas.height = 720;
-canvas.tabIndex = 1;
-canvas.focus();
 
 const ctx = canvas.getContext("2d");
 ctx.textAlign = "center";
@@ -13,34 +11,36 @@ let selected = 0;
 
 const menuY = 350;
 const lineHeight = 60;
-const hitWidth = 300; // vùng click ngang
+const hitWidth = 250;
 
-// KEYBOARD
-window.addEventListener("keydown", (e) => {
-  if (["ArrowUp", "ArrowDown", "Enter"].includes(e.key)) {
-    e.preventDefault();
-  }
+
+// ===== KEYBOARD =====
+document.addEventListener("keydown", (e) => {
 
   if (e.key === "ArrowUp") {
     selected = (selected - 1 + options.length) % options.length;
   }
 
   if (e.key === "ArrowDown") {
-    selected = (selected + options.length) % options.length;
+    selected = (selected + 1) % options.length;
   }
 
   if (e.key === "Enter") {
     chooseOption();
   }
+
 });
 
-// MOUSE MOVE (hover)
+
+// ===== MOUSE HOVER =====
 canvas.addEventListener("mousemove", (e) => {
+
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
 
   options.forEach((_, i) => {
+
     const y = menuY + i * lineHeight;
     const xCenter = canvas.width / 2;
 
@@ -52,16 +52,21 @@ canvas.addEventListener("mousemove", (e) => {
     ) {
       selected = i;
     }
+
   });
+
 });
 
-// MOUSE DOWN (CLICK)
+
+// ===== MOUSE CLICK =====
 canvas.addEventListener("mousedown", (e) => {
+
   const rect = canvas.getBoundingClientRect();
   const mouseX = e.clientX - rect.left;
   const mouseY = e.clientY - rect.top;
 
   options.forEach((_, i) => {
+
     const y = menuY + i * lineHeight;
     const xCenter = canvas.width / 2;
 
@@ -74,34 +79,48 @@ canvas.addEventListener("mousedown", (e) => {
       selected = i;
       chooseOption();
     }
+
   });
+
 });
+
 
 function chooseOption() {
   alert("Selected: " + options[selected]);
 }
 
-// RENDER
+
+
+// ===== RENDER =====
 function loop() {
+
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // background
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  // title
+  // Title
   ctx.fillStyle = "white";
   ctx.font = "60px Arial";
   ctx.fillText("MAIN MENU", canvas.width / 2, 200);
 
-  // menu
+  // Options
   ctx.font = "40px Arial";
+
   options.forEach((opt, i) => {
+
     ctx.fillStyle = i === selected ? "yellow" : "white";
-    ctx.fillText(opt, canvas.width / 2, menuY + i * lineHeight);
+
+    ctx.fillText(
+      opt,
+      canvas.width / 2,
+      menuY + i * lineHeight
+    );
+
   });
 
   requestAnimationFrame(loop);
+
 }
 
 loop();
